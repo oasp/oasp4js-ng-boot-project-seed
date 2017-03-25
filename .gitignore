@@ -1,0 +1,59 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### Client ###
+
+# compiled output
+src/main/client/dist
+src/main/client/tmp
+src/main/client/out-tsc
+
+# dependencies
+src/main/client/node
+src/main/client/node_modules
+
+# misc
+src/main/client/.sass-cache
+src/main/client/connect.lock
+src/main/client/coverage
+src/main/client/libpeerconnection.log
+npm-debug.log
+testem.log
+src/main/client/typings
+
+# e2e
+src/main/client/e2e/*.js
+src/main/client/e2e/*.map
+
+# System Files
+.DS_Store
+Thumbs.db
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+### VSCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
