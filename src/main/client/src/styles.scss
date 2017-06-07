@@ -1,0 +1,23 @@
+/* You can add global styles to this file, and also import other style files */
+@import '../node_modules/bootstrap/scss/bootstrap';
+
+.app {
+  app-nav {
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  input.ng-invalid.ng-touched {
+    border-color: red;
+  }
+
+  form.ng-submitted {
+    input.ng-invalid {
+      border-color: red;
+    }
+  }
+
+  span.error-msg {
+    color: red;
+  }
+}

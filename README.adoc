@@ -1,0 +1,242 @@
+= devonfw Angular CLI + Spring Boot Project Seed
+
+This is a project seed for Single Page Applications (SPAa) built on top of https://projects.spring.io/spring-boot[Spring Boot] and
+https://cli.angular.io/[Angular CLI] / https://github.com/oasp/oasp4js-ng2-project-seed[OASP4JS ng2 project seed].
+To integrate these two parts of a SPA, we make use of https://github.com/eirslett/frontend-maven-plugin[frontend-maven-plugin].
+
+image:https://img.shields.io/travis/devonfw/ng-boot-project-seed/master.svg[Build Status (Travis CI), link=https://travis-ci.org/devonfw/ng-boot-project-seed/master]
+
+== Getting started
+
+=== Install prerequisites
+
+You need a Git client and Java 8 installed on your machine.
+
+=== Install the Project Seed
+
+Clone the `ng-boot-project-seed` repository:
+
+....
+git clone https://github.com/devonfw/ng-boot-project-seed.git
+....
+
+Build the application:
+
+....
+cd ng-boot-project-seed
+mvnw clean package
+....
+
+The above command runs Maven via the https://github.com/takari/maven-wrapper[Maven Wrapper] (which means the necessary
+version of Maven will be downloaded for the first time). Also, thanks to the https://github.com/eirslett/frontend-maven-plugin[frontend-maven-plugin]
+the necessary https://nodejs.org/[Node.js] / https://www.npmjs.com/[npm] / https://yarnpkg.com/[yarn] version will be downloaded for the first time. Having the https://nodejs.org/[Node.js] platform available, the frontend part is built.
+During the build (in the Maven `test`  phase) JavaScript tests are executed as well. The web application distribution
+which can be found in `src\main\client\dist` is then treated as a Java resource available in `src\main\resources\static`
+which in turn is served by https://projects.spring.io/spring-boot[Spring Boot] as http://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-developing-web-applications.html#boot-features-spring-mvc-static-content[static web content].
+
+
+=== Run the application
+
+Start the application using the following command:
+
+....
+java -jar target\ng-boot-project-seed-0.0.1-SNAPSHOT.jar
+....
+
+Open http://localhost:8080[http://localhost:8080] in your browser.
+
+== How we created the application
+
+=== Configure https://github.com/eirslett/frontend-maven-plugin[frontend-maven-plugin]
+
+First, we added the following scripts to the `package.json`:
+
+[source, json]
+....
+"scripts": {
+    ...
+    "build4prod": "node ./node_modules/@angular/cli/bin/ng build --prod",
+    "test4ci": "node ./node_modules/@angular/cli/bin/ng test --single-run --browsers=PhantomJS"
+}
+....
+
+Note that the relative path to the local version of `ng` script was specified.
+
+Then, we configured the new maven profile `jsclient` which uses the https://github.com/eirslett/frontend-maven-plugin[frontend-maven-plugin] to download https://nodejs.org/[Node.js] / https://www.npmjs.com/[npm] / https://yarnpkg.com/[yarn], build the client application (`build4prod`) and run JavaScript tests (`test4ci`). The following configuration was added to `pom.xml`:
+
+[source, xml]
+....
+...
+<profile>
+    <id>jsclient</id>
+    <activation>
+        <activeByDefault>true</activeByDefault>
+    </activation>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>${frontend-maven-plugin.version}</version>
+                <configuration>
+                    <workingDirectory>${js.client.dir}</workingDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install node and yarn</id>
+                        <goals>
+                            <goal>install-node-and-yarn</goal>
+                        </goals>
+                        <configuration>
+                            <nodeVersion>${node.version}</nodeVersion>
+                            <yarnVersion>${yarn.version}</yarnVersion>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                            <nodeVersion>${node.version}</nodeVersion>
+                            <npmVersion>${npm.version}</npmVersion>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>yarn install</id>
+                        <goals>
+                            <goal>yarn</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>Build Client (npm run-script build4prod)</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run-script build4prod</arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>JavaScript Tests (npm run-script test4ci)</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run-script test4ci</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            ...
+        </plugins>
+    </build>
+</profile>
+...
+....
+
+=== Create history API fallback
+
+We added the `HistoryApiFallbackController` in order to handle forwarding to the `index.html` when bookmarking any client's dialog (whose path begins with `app` per convention). Such handling is necessary because the HTML5 history API is used in the client.
+
+[source, java]
+....
+@Controller
+public class HistoryApiFallbackController {
+
+  @RequestMapping(value = "app/**", method = RequestMethod.GET)
+  public String historyApiFallback() {
+    return "forward:/";
+  }
+}
+....
+
+=== Display build metadata
+
+In order to display in the page the current application version and build time, we added the following meta tags to head section of `index.html`:
+
+[source, html]
+....
+<head>
+    ...
+    <meta name="version" content="${project.version}">
+    <meta name="timestamp" content="${timestamp}">
+    ...
+</head>
+....
+
+For this to work, we used https://maven.apache.org/plugins/maven-resources-plugin/index.html[maven-resources-plugin] to filter `src/main/client/dist/index.html` (the plugin uses http://maven.apache.org/shared/maven-filtering/[Maven Filtering] for filtering resources). The following configuration was added to our `jsclient` profile (`pom.xml`):
+
+[source, xml]
+....
+...
+<profile>
+    <id>jsclient</id>
+    <activation>
+        <activeByDefault>true</activeByDefault>
+    </activation>
+    <build>
+        <plugins>
+            ...
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>filter-index.html</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <useDefaultDelimiters>true</useDefaultDelimiters>
+                            <outputDirectory>${project.build.directory}/client</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${js.client.dir}/dist</directory>
+                                    <filtering>true</filtering>
+                                    <includes>
+                                        <include>index.html</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-index.html</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${js.client.dir}/dist</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/client</directory>
+                                    <filtering>false</filtering>
+                                    <includes>
+                                        <include>index.html</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</profile>
+...
+....
+Technically, a copy of `index.html` is created: first the file is filtered and copied to `target/client` and then copied to `src/main/client/dist` overwriting the previous version.

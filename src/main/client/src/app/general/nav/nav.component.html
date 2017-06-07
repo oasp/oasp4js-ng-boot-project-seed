@@ -1,0 +1,29 @@
+<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+  <button class="navbar-toggler navbar-toggler-right"
+          type="button"
+          aria-controls="navbarSupportedContent"
+          aria-label="Toggle navigation"
+          [attr.aria-expanded]="!navCollapsed"
+          [class.collapsed]="navCollapsed"
+          (click)="toggleNavigation()">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="#">
+      <ng-template #oaspVersion><span class="version-template">Version: {{currentBuild.version}}, built at {{currentBuild.timestamp}}</span></ng-template>
+      <div class="d-flex flex-column" placement="right"
+           [ngbTooltip]="oaspVersion" >
+          <img src="assets/oasp-logo-72dpi.png" height="25">
+          <span class="oasp-version">Ver. {{currentBuild.version}}</span>
+      </div>
+  </a>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent" [class.show]="!navCollapsed">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/app/books">Book Overview</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/app/book">New Book</a>
+      </li>
+    </ul>
+  </div>
+</nav>

@@ -1,11 +1,15 @@
 import { browser, element, by } from 'protractor';
 
-export class BooksPage {
+export class AppVeryFirstPage {
   navigateTo() {
     return browser.get('/');
   }
 
-  getParagraphText() {
-    return element(by.css('app-root h1')).getText();
+  getNavigationElement() {
+    return element(by.css('app-root app-nav'));
+  }
+
+  getTextOnNoBooksAvailable() {
+    return element(by.css('app-root app-book-overview p')).getText();
   }
 }

@@ -1,0 +1,146 @@
+= OASP4JS Angular Project Seed
+
+This is an Angular Project Seed recommended by OASP4JS. The Project Seed is in fact a simple application built upon
+the https://github.com/angular/angular-cli[Angular CLI].
+
+image:https://img.shields.io/travis/oasp/oasp4js-ng-project-seed/master.svg[Build Status (Travis CI), link=https://travis-ci.org/oasp/oasp4js-ng-project-seed]
+image:https://img.shields.io/codecov/c/github/oasp/oasp4js-ng-project-seed/master.svg[Code Coverage, link=https://codecov.io/gh/oasp/oasp4js-ng-project-seed]
+image:https://www.versioneye.com/user/projects/59315f2e22f278003c5f84d5/badge.svg[Dependency Status, link=https://www.versioneye.com/user/projects/59315f2e22f278003c5f84d5]
+
+== Getting started
+
+=== Install prerequisites
+
+You need a Git client, the https://nodejs.org/[Node.js], the https://yarnpkg.com/[Yarn package manager] and the https://github.com/angular/angular-cli[Angular CLI] to make use of the project seed.
+It is highly recommended to use the following versions:
+
+* Node.js 6.9.5
+* Yarn 0.21.3
+* Angular CLI 1.1.0
+
+==== Git
+Check if you have a Git client already installed:
+
+----
+git --version
+----
+
+If your OS can not recognize this command, install Git. For details please refer to http://git-scm.com[this page].
+When installing under Windows, please make sure you check the following option:
+
+- [*] Use git from Windows command prompt
+
+==== Node.js
+
+It is highly recommended to install the https://github.com/creationix/nvm[Node Version Manager] which manages multiple active
+Node.js versions on your machine. The windows version of nvm can be found https://github.com/coreybutler/nvm-windows#installation--upgrades[here].
+
+==== Yarn
+
+Having installed Node.js (using the https://github.com/creationix/nvm[Node Version Manager]) you have also its package manager - https://www.npmjs.com/[npm] installed which can be used to install https://yarnpkg.com/[Yarn]:
+
+----
+npm install -g yarn
+----
+
+Please note that this is not the only possibility available. Please refer to the https://yarnpkg.com/en/docs/install[Yarn Installation Instructions] for more details on other possibilities.
+
+==== Angular CLI
+
+Having installed https://yarnpkg.com/[Yarn] you can install https://github.com/angular/angular-cli[Angular CLI] like this:
+
+----
+yarn global add @angular/cli
+----
+
+=== Run the application
+
+Clone this repository:
+
+----
+git clone https://github.com/oasp/oasp4js-ng-project-seed.git
+----
+
+let https://yarnpkg.com/[Yarn] to install all dependencies:
+
+----
+cd oasp4js-ng-project-seed
+yarn
+----
+
+and start the application
+
+----
+ng serve
+----
+
+== How we created the application
+
+=== https://github.com/angular/angular-cli[Angular CLI] in action
+
+The application was generated using the https://github.com/angular/angular-cli[Angular CLI]:
+
+----
+ng new oasp4js-ng-project-seed --style=scss --skip-install
+----
+
+Than we let https://yarnpkg.com/[Yarn] to install all dependencies:
+
+----
+cd oasp4js-ng-project-seed
+yarn
+----
+
+=== http://phantomjs.org/[PhantomJS] for headless tests
+
+https://github.com/angular/angular-cli[Angular CLI] uses Chrome for running your tests. Although this is good during
+development, when running your tests in the Continuous Integration environment, you need a headless browser. These are
+steps we made to make your tests being executed against the http://phantomjs.org/[PhantomJS] browser:
+
+==== Install the http://phantomjs.org/[PhantomJS] launcher for https://karma-runner.github.io/[Karma]
+
+Use https://yarnpkg.com/[Yarn] to install the http://phantomjs.org/[PhantomJS] launcher for https://karma-runner.github.io/[Karma]
+
+----
+yarn add karma-phantomjs-launcher
+----
+
+Update the https://karma-runner.github.io/[Karma] configuration file `karma.conf.js`:
+
+[source, javascript]
+----
+...
+plugins: [
+  ...
+  require('karma-phantomjs-launcher')
+]
+...
+----
+
+Enable (uncomment) some polyfills needed by the http://phantomjs.org/[PhantomJS] (`polyfills.ts`):
+
+[source, javascript]
+----
+import 'core-js/es6/object';
+import 'core-js/es6/string';
+import 'core-js/es6/array';
+----
+
+Typically the following command should be executed in the Continuous Integration environment:
+
+----
+ng test --single-run --code-coverage --browsers=PhantomJS
+----
+
+==== Install https://v4-alpha.getbootstrap.com/[Bootstrap] and https://ng-bootstrap.github.io[ng-bootstrap]
+
+As a widget library we use https://v4-alpha.getbootstrap.com/[Bootstrap]. Its JavaScript part was rewritten in TypeScript
+as https://angular.io[Angular] directives by https://ng-bootstrap.github.io[ng-bootstrap].
+
+Use https://yarnpkg.com/[Yarn] to install https://v4-alpha.getbootstrap.com/[Bootstrap] and https://ng-bootstrap.github.io[ng-bootstrap]:
+
+----
+yarn add bootstrap@next @ng-bootstrap/ng-bootstrap
+----
+
+Follow the https://ng-bootstrap.github.io/#/getting-started[ng-bootstrap installation instructions].

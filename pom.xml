@@ -1,54 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.capgemini</groupId>
-	<artifactId>books</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+    <groupId>com.capgemini</groupId>
+    <artifactId>ng-boot-project-seed</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
-	<name>books</name>
-	<description>Demo project for Spring Boot</description>
+    <name>ng-boot-project-seed</name>
+    <description>Demo project for Spring Boot</description>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.2.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.2.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
-		<js.client.dir>src/main/client</js.client.dir>
-		<node.version>v6.9.5</node.version>
-		<yarn.version>v0.16.1</yarn.version>
-		<npm.version>3.10.10</npm.version>
-		<frontend-maven-plugin.version>1.3</frontend-maven-plugin.version>
-	</properties>
+    <properties>
+        <!--For filtering in index.html to set build meta data-->
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss z</maven.build.timestamp.format>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <js.client.dir>src/main/client</js.client.dir>
+        <node.version>v6.10.2</node.version>
+        <yarn.version>v0.22.0</yarn.version>
+        <npm.version>3.10.10</npm.version>
+        <frontend-maven-plugin.version>1.3</frontend-maven-plugin.version>
+    </properties>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
         <resources>
             <resource>
                 <directory>${project.basedir}/src/main/resources</directory>
@@ -58,34 +62,34 @@
                 <targetPath>static</targetPath>
             </resource>
         </resources>
-	</build>
+    </build>
 
-	<profiles>
-		<profile>
-			<id>jsclient</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>com.github.eirslett</groupId>
-						<artifactId>frontend-maven-plugin</artifactId>
-						<version>${frontend-maven-plugin.version}</version>
-						<configuration>
-							<workingDirectory>${js.client.dir}</workingDirectory>
-						</configuration>
-						<executions>
-							<execution>
-								<id>install node and yarn</id>
-								<goals>
-									<goal>install-node-and-yarn</goal>
-								</goals>
-								<configuration>
-									<nodeVersion>${node.version}</nodeVersion>
-									<yarnVersion>${yarn.version}</yarnVersion>
-								</configuration>
-							</execution>
+    <profiles>
+        <profile>
+            <id>jsclient</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <version>${frontend-maven-plugin.version}</version>
+                        <configuration>
+                            <workingDirectory>${js.client.dir}</workingDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>install node and yarn</id>
+                                <goals>
+                                    <goal>install-node-and-yarn</goal>
+                                </goals>
+                                <configuration>
+                                    <nodeVersion>${node.version}</nodeVersion>
+                                    <yarnVersion>${yarn.version}</yarnVersion>
+                                </configuration>
+                            </execution>
 
                             <execution>
                                 <id>install node and npm</id>
@@ -98,52 +102,92 @@
                                 </configuration>
                             </execution>
 
-							<!--<execution>-->
-								<!--<id>angular-cli install</id>-->
-								<!--<goals>-->
-									<!--<goal>yarn</goal>-->
-								<!--</goals>-->
-								<!--<configuration>-->
-									<!--<arguments>global add  @angular/cli</arguments>-->
-								<!--</configuration>-->
-							<!--</execution>-->
+                            <execution>
+                                <id>yarn install</id>
+                                <goals>
+                                    <goal>yarn</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <arguments>install</arguments>
+                                </configuration>
+                            </execution>
 
-							<execution>
-								<id>yarn install</id>
-								<goals>
-									<goal>yarn</goal>
-								</goals>
-								<phase>generate-resources</phase>
-								<configuration>
-									<arguments>install</arguments>
-								</configuration>
-							</execution>
+                            <execution>
+                                <id>Build Client (npm run-script build4prod)</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>run-script build4prod</arguments>
+                                </configuration>
+                            </execution>
 
-							<execution>
-								<id>Build Client (npm run-script build4prod)</id>
-								<phase>generate-resources</phase>
-								<goals>
-									<goal>npm</goal>
-								</goals>
-								<configuration>
-									<arguments>run-script build4prod</arguments>
-								</configuration>
-							</execution>
-
-							<execution>
-								<id>JavaScript Tests (npm run-script test4ci)</id>
+                            <execution>
+                                <id>JavaScript Tests (npm run-script test4ci)</id>
                                 <phase>test</phase>
                                 <goals>
-									<goal>npm</goal>
-								</goals>
-								<configuration>
-									<arguments>run-script test4ci</arguments>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>run-script test4ci</arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Filtering the src/main/client/dist/index.html to set the current version and build timestamp as meta
+                    tags in the HTML document head. Technically, a copy of index.html has to be created: first the file is filtered
+                    and copied to target/client and then copied to src/main/client/dist overwriting the previous version.
+                    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>filter-index.html</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <useDefaultDelimiters>true</useDefaultDelimiters>
+                                    <outputDirectory>${project.build.directory}/client</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${js.client.dir}/dist</directory>
+                                            <filtering>true</filtering>
+                                            <includes>
+                                                <include>index.html</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy-index.html</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${js.client.dir}/dist</outputDirectory>
+                                    <overwrite>true</overwrite>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.build.directory}/client</directory>
+                                            <filtering>false</filtering>
+                                            <includes>
+                                                <include>index.html</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
