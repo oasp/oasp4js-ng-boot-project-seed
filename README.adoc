@@ -4,7 +4,7 @@ This is a project seed for Single Page Applications (SPAa) built on top of https
 https://cli.angular.io/[Angular CLI] / https://github.com/oasp/oasp4js-ng2-project-seed[OASP4JS ng2 project seed].
 To integrate these two parts of a SPA, we make use of https://github.com/eirslett/frontend-maven-plugin[frontend-maven-plugin].
 
-image:https://img.shields.io/travis/oasp/oasp4js-ng-boot-project-seed/master.svg[Build Status (Travis CI), link=https://travis-ci.org/oasp/oasp4js-ng-boot-project-seed/master]
+image:https://travis-ci.org/oasp/oasp4js-ng-boot-project-seed.svg?branch=master["Build Status", link="https://travis-ci.org/oasp/oasp4js-ng-boot-project-seed"]
 
 == Getting started
 
